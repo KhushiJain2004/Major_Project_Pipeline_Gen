@@ -1,0 +1,5 @@
+- name: Set up Java {{#if matrix.java_versions}}({{expr "matrix.node"}}){{else}}({{java_versions}}){{/if}}
+  uses: actions/setup-java@v4
+  with:
+    distribution: 'temurin'
+    java-version: {{#if matrix.java_versions}}{{expr "matrix.node"}}{{else}}"{{java_versions}}"{{/if}}

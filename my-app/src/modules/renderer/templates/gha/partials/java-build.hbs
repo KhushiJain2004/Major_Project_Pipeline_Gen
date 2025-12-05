@@ -1,0 +1,9 @@
+{{#if (eq package_manager "maven")}}
+- name: Build (Maven)
+  run: mvn -B package -DskipTests=false
+{{/if}}
+
+{{#if (eq package_manager "gradle")}}
+- name: Build (Gradle)
+  run: ./gradlew build
+{{/if}}

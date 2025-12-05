@@ -1,0 +1,9 @@
+{{#if (eq package_manager "maven")}}
+- name: Run tests (Maven)
+  run: mvn -B test
+{{/if}}
+
+{{#if (eq package_manager "gradle")}}
+- name: Run tests (Gradle)
+  run: ./gradlew test
+{{/if}}

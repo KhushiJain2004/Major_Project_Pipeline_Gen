@@ -1,0 +1,13 @@
+{{#if (eq package_manager "maven")}}
+- name: Install dependencies (Maven)
+  run: mvn -B dependency:resolve
+{{/if}}
+
+{{#if (eq package_manager "gradle")}}
+- name: Install dependencies (Gradle)
+  run: ./gradlew dependencies
+{{/if}}
+{{#if (eq package_manager "gradle-kotlin")}}
+- name: Install dependencies (Gradle Kotlin DSL)
+  run: ./gradlew dependencies
+{{/if}}
