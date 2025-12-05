@@ -3,7 +3,7 @@
   "language": "js",
   "package_manager": "npm",
   "lint_command": "npm run lint || echo 'No lint script'",
-  "test_command": "npm test || echo 'No tests found'",
+  "test_command": "npm test",
   "build_command": "npm run build || echo 'No build script'",
   "artifact_path": "dist/",
   "matrix": {
@@ -13,8 +13,15 @@
       "20.x"
     ]
   },
-  "caching": {},
-  "secrets_required": [],
+  "caching": {
+    "paths": [
+      "~/.npm"
+    ],
+    "key": "npm-cache-${{ hashFiles('**/package-lock.json') }}"
+  },
+  "secrets_required": [
+    "DOCKER_REGISTRY_TOKEN"
+  ],
   "deployment": {
     "enabled": false,
     "provider": "",
@@ -22,13 +29,13 @@
     "mode": ""
   },
   "container": {
-    "enabled": false,
-    "image": "",
-    "registry": "",
+    "enabled": true,
+    "image": "ghcr.io/OWNER/REPO",
+    "registry": "ghcr.io",
     "platforms": [
       "linux/amd64"
     ],
-    "cache": false,
+    "cache": true,
     "tags": [],
     "provenance": false,
     "sbom": false,
@@ -47,115 +54,170 @@
   "_classifier": {
     "rules": [
       {
+        "label": "docker",
+        "confidence": 0.99,
+        "reason": "Dockerfile present"
+      },
+      {
         "label": "node",
-        "confidence": 0.95,
+        "confidence": 0.97,
         "reason": "package.json present"
+      },
+      {
+        "label": "polyglot",
+        "confidence": 0.5,
+        "reason": "multiple languages detected: Dockerfile, JavaScript"
       }
     ],
     "hf": {
       "model": "facebook/bart-large-mnli",
       "labels": [
         "node",
-        "monorepo",
-        "terraform",
+        "polyglot",
         "docker",
+        "go",
+        "monorepo",
         "generic",
-        "python",
-        "java"
+        "terraform",
+        "java",
+        "python"
       ],
       "scores": [
-        0.43829813599586487,
-        0.2611812353134155,
-        0.22156715393066406,
-        0.07074974477291107,
-        0.00696853781118989,
-        0.000744016608223319,
-        0.00029549156897701323
+        0.9499667286872864,
+        0.9455862045288086,
+        0.8005883097648621,
+        0.4436577558517456,
+        0.08578284829854965,
+        0.04180695116519928,
+        0.017585735768079758,
+        0.012457771226763725,
+        0.00039502434083260596
       ],
       "raw": [
         {
           "label": "node",
-          "score": 0.43829813599586487
+          "score": 0.9499667286872864
         },
         {
-          "label": "monorepo",
-          "score": 0.2611812353134155
-        },
-        {
-          "label": "terraform",
-          "score": 0.22156715393066406
+          "label": "polyglot",
+          "score": 0.9455862045288086
         },
         {
           "label": "docker",
-          "score": 0.07074974477291107
+          "score": 0.8005883097648621
+        },
+        {
+          "label": "go",
+          "score": 0.4436577558517456
+        },
+        {
+          "label": "monorepo",
+          "score": 0.08578284829854965
         },
         {
           "label": "generic",
-          "score": 0.00696853781118989
+          "score": 0.04180695116519928
         },
         {
-          "label": "python",
-          "score": 0.000744016608223319
+          "label": "terraform",
+          "score": 0.017585735768079758
         },
         {
           "label": "java",
-          "score": 0.00029549156897701323
+          "score": 0.012457771226763725
+        },
+        {
+          "label": "python",
+          "score": 0.00039502434083260596
         }
       ]
     },
     "merged": [
       {
         "label": "node",
-        "rule": 0.95,
-        "hf": 0.43829813599586487,
-        "combined": 0.8220745339989661,
-        "reasons": []
+        "rule": 0.97,
+        "hf": 0.9499667286872864,
+        "combined": 0.9639900186061858,
+        "reasons": [
+          "strong rule-based evidence"
+        ]
+      },
+      {
+        "label": "docker",
+        "rule": 0.99,
+        "hf": 0.8005883097648621,
+        "combined": 0.9331764929294586,
+        "reasons": [
+          "strong rule-based evidence"
+        ]
+      },
+      {
+        "label": "polyglot",
+        "rule": 0.5,
+        "hf": 0.9455862045288086,
+        "combined": 0.811910343170166,
+        "reasons": [
+          "strong model confidence"
+        ]
+      },
+      {
+        "label": "go",
+        "rule": 0,
+        "hf": 0.4436577558517456,
+        "combined": 0.3549262046813965,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
       },
       {
         "label": "monorepo",
         "rule": 0,
-        "hf": 0.2611812353134155,
-        "combined": 0.14364967942237855,
-        "reasons": []
-      },
-      {
-        "label": "terraform",
-        "rule": 0,
-        "hf": 0.22156715393066406,
-        "combined": 0.12186193466186525,
-        "reasons": []
-      },
-      {
-        "label": "docker",
-        "rule": 0,
-        "hf": 0.07074974477291107,
-        "combined": 0.03891235962510109,
-        "reasons": []
+        "hf": 0.08578284829854965,
+        "combined": 0.06862627863883973,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
       },
       {
         "label": "generic",
         "rule": 0,
-        "hf": 0.00696853781118989,
-        "combined": 0.00383269579615444,
-        "reasons": []
+        "hf": 0.04180695116519928,
+        "combined": 0.033445560932159425,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
       },
       {
-        "label": "python",
+        "label": "terraform",
         "rule": 0,
-        "hf": 0.000744016608223319,
-        "combined": 0.0004092091345228255,
-        "reasons": []
+        "hf": 0.017585735768079758,
+        "combined": 0.014068588614463806,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
       },
       {
         "label": "java",
         "rule": 0,
-        "hf": 0.00029549156897701323,
-        "combined": 0.0001625203629373573,
-        "reasons": []
+        "hf": 0.012457771226763725,
+        "combined": 0.00996621698141098,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
+      },
+      {
+        "label": "python",
+        "rule": 0,
+        "hf": 0.00039502434083260596,
+        "combined": 0.0003160194726660848,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
       }
     ],
     "chosen": [
       "node"
-    ]
+    ],
+    "primary": "node"
   }
 }

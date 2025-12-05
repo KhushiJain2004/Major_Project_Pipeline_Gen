@@ -1,25 +1,55 @@
-// utils/mergeUtils.js
-export function mergeRuleAndHF(ruleCandidates = [], hfResult = {}) {
-  const hfMap = {};
-  (hfResult.labels || []).forEach((l, i) => (hfMap[l] = (hfResult.scores && hfResult.scores[i]) || 0));
+// src/modules/classifier/utils/mergeUtils.js
 
-  const labels = Array.from(new Set([...ruleCandidates.map((c) => c.label), ...Object.keys(hfMap)]));
+/**
+ * Merge rule-based candidates with Hugging Face zero-shot scores.
+ */
+export function mergeRuleAndHF(ruleCandidates = [], hfResult = {}) {
+  const ruleMap = {};
+  for (const c of ruleCandidates) {
+    ruleMap[c.label] = Math.max(ruleMap[c.label] || 0, c.confidence || 0);
+  }
+
+  const hfMap = {};
+  (hfResult.labels || []).forEach((label, i) => {
+    const score = (hfResult.scores && hfResult.scores[i]) || 0;
+    hfMap[label] = score;
+  });
+
+  const labels = Array.from(new Set([...Object.keys(ruleMap), ...Object.keys(hfMap)]));
 
   const merged = labels
     .map((label) => {
-      const rule = ruleCandidates.find((r) => r.label === label)?.confidence || 0;
+      const rule = ruleMap[label] || 0;
       const hf = hfMap[label] || 0;
-      const ruleWeight = rule >= 0.9 ? 0.75 : 0.45;
+      let ruleWeight = 0.5;
+      const reasons = [];
+
+      if (rule >= 0.9 && hf < rule) {
+        ruleWeight = 0.7;
+        reasons.push("strong rule-based evidence");
+      } else if (hf >= 0.8 && hf > rule) {
+        ruleWeight = 0.3;
+        reasons.push("strong model confidence");
+      } else if (rule > 0 && hf === 0) {
+        ruleWeight = 0.8;
+        reasons.push("no model evidence; rules only");
+      } else if (rule === 0 && hf > 0) {
+        ruleWeight = 0.2;
+        reasons.push("no rule evidence; model only");
+      }
+
       const combined = rule * ruleWeight + hf * (1 - ruleWeight);
-      return { label, rule, hf, combined, reasons: [] };
+      return { label, rule, hf, combined, reasons };
     })
     .sort((a, b) => b.combined - a.combined);
 
   return { merged };
 }
 
-export function chooseTemplates(merged, threshold = 0.5) {
+/**
+ * Choose one primary template (keeps downstream logic simple).
+ */
+export function chooseTemplates(merged, _threshold = 0.5) {
   if (!merged || !merged.length) return ["generic"];
-  const accepted = merged.filter((m) => m.combined >= threshold).map((m) => m.label);
-  return accepted.length ? accepted : [merged[0].label];
+  return [merged[0].label];
 }
