@@ -8,6 +8,7 @@ const HF_TOKEN = process.env.HF_TOKEN || null;
 const HF_PARAM_MODEL = process.env.HF_PARAM_MODEL || null; // <= ONLY if you explicitly set one
 
 const hf = HF_TOKEN && HF_PARAM_MODEL ? new InferenceClient(HF_TOKEN) : null;
+console.log(hf)
 
 /**
  * deterministicFallback — safe, language-aware defaults
@@ -180,17 +181,37 @@ function deterministicFallback(features, chosenTemplates = []) {
       : hasGradle
       ? "./gradlew build --no-daemon -x test"
       : "javac -d out $(find src -name '*.java' 2>/dev/null)";
+    out.has_test=(features) =>{
+        if (features?.composition?.has_tests === true) return true;
+
+        const files = features?.detectedFiles || [];
+        return files.some(path => 
+          path.includes("src/test") ||
+          path.includes("__tests__") ||
+          path.includes("tests")
+        );
+      }
     out.test_command = hasPom
       ? "mvn test"
       : hasGradle
       ? "./gradlew test"
       : "";
+    out.java_version=detectJavaVersion(features)
     out.artifact_path = hasPom ? "target/" : hasGradle ? "build/" : "";
     return out;
   }
 
   // Generic fallback
   return base;
+}
+function detectJavaVersion(features) {
+  const javaMeta = features?.build_and_dependency?.java_metadata;
+
+  // If version ever extracted here, use it
+  if (javaMeta?.java_version) return javaMeta.java_version;
+
+  // Could also inspect Dockerfile or toolchains (advanced)
+  return 17; // safe default
 }
 
 /**
@@ -223,15 +244,13 @@ Rules:
 `;
 
   try {
-    const response = await hf.textGeneration({
-      model: HF_PARAM_MODEL,
-      inputs: prompt,
-      provider: "hf-inference",
-      parameters: {
-        max_new_tokens: 600,
-        temperature: 0.2,
-      },
-    });
+    await hf.request({
+  model: "openai/gpt-oss-120b",
+  task: "text-generation",
+  inputs: prompt,
+});
+
+
 
     const outputText =
       response.generated_text || JSON.stringify(response);

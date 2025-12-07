@@ -44,6 +44,7 @@ export async function render(valuesPath, outPath,template_type) {
   var lang;
   if(context.project_type=='js'|| context.project_type=='node' || context.project_type=='nodejs' ){ lang='node'}
   else if(context.project_type=='py' || context.project_type=='python'){ lang='python'}
+  else if(context.language=='java' || context.project_type=='java' || context.project_type=='java-maven' || context.project_type=='java-gradle'){ lang='java'}
     
 
   //change template type  as needed (basic-layout.hbs, intermediate.hbs)
