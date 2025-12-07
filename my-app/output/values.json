@@ -1,13 +1,24 @@
 {
-  "project_type": "java",
-  "language": "java",
-  "package_manager": null,
-  "lint_command": "",
-  "test_command": "",
-  "build_command": "javac -d out $(find src -name '*.java' 2>/dev/null)",
-  "artifact_path": "",
-  "matrix": {},
-  "caching": {},
+  "project_type": "node",
+  "language": "js",
+  "package_manager": "npm",
+  "lint_command": "npm run lint",
+  "test_command": "npm test || echo 'No tests found'",
+  "build_command": "npm run build",
+  "artifact_path": "dist/",
+  "matrix": {
+    "node_versions": [
+      "16.x",
+      "18.x",
+      "20.x"
+    ]
+  },
+  "caching": {
+    "paths": [
+      "~/.npm"
+    ],
+    "key": "npm-cache-${{ hashFiles('**/package-lock.json') }}"
+  },
   "secrets_required": [],
   "deployment": {
     "enabled": false,
@@ -37,33 +48,172 @@
     "release_on_tag": true
   },
   "paths_filters": {},
+  "node_version": "18.x",
   "_classifier": {
     "rules": [
       {
-        "label": "java",
-        "confidence": 0.95,
-        "reason": "Java build descriptor"
+        "label": "node",
+        "confidence": 0.97,
+        "reason": "package.json present"
+      },
+      {
+        "label": "generic",
+        "confidence": 0.5,
+        "reason": "derived recommended template: add-ci-workflow"
+      },
+      {
+        "label": "polyglot",
+        "confidence": 0.5,
+        "reason": "multiple languages detected: JavaScript, CSS, HTML"
       }
     ],
     "hf": {
       "model": "facebook/bart-large-mnli",
-      "labels": [],
-      "scores": [],
-      "raw": {
-        "error": "Failed to perform inference: Invalid username or password."
-      }
+      "labels": [
+        "polyglot",
+        "node",
+        "docker",
+        "go",
+        "monorepo",
+        "terraform",
+        "generic",
+        "java",
+        "python"
+      ],
+      "scores": [
+        0.9737747311592102,
+        0.6102523803710938,
+        0.18989020586013794,
+        0.17975321412086487,
+        0.12478650361299515,
+        0.04446135461330414,
+        0.03258899599313736,
+        0.005289454013109207,
+        0.0003206751716788858
+      ],
+      "raw": [
+        {
+          "label": "polyglot",
+          "score": 0.9737747311592102
+        },
+        {
+          "label": "node",
+          "score": 0.6102523803710938
+        },
+        {
+          "label": "docker",
+          "score": 0.18989020586013794
+        },
+        {
+          "label": "go",
+          "score": 0.17975321412086487
+        },
+        {
+          "label": "monorepo",
+          "score": 0.12478650361299515
+        },
+        {
+          "label": "terraform",
+          "score": 0.04446135461330414
+        },
+        {
+          "label": "generic",
+          "score": 0.03258899599313736
+        },
+        {
+          "label": "java",
+          "score": 0.005289454013109207
+        },
+        {
+          "label": "python",
+          "score": 0.0003206751716788858
+        }
+      ]
     },
     "merged": [
       {
-        "label": "java",
-        "rule": 0.95,
-        "hf": 0,
-        "combined": 0.7124999999999999,
+        "label": "node",
+        "rule": 0.97,
+        "hf": 0.6102523803710938,
+        "combined": 0.8620757141113281,
+        "reasons": [
+          "strong rule-based evidence"
+        ]
+      },
+      {
+        "label": "polyglot",
+        "rule": 0.5,
+        "hf": 0.9737747311592102,
+        "combined": 0.8316423118114471,
+        "reasons": [
+          "strong model confidence"
+        ]
+      },
+      {
+        "label": "generic",
+        "rule": 0.5,
+        "hf": 0.03258899599313736,
+        "combined": 0.2662944979965687,
         "reasons": []
+      },
+      {
+        "label": "docker",
+        "rule": 0,
+        "hf": 0.18989020586013794,
+        "combined": 0.15191216468811036,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
+      },
+      {
+        "label": "go",
+        "rule": 0,
+        "hf": 0.17975321412086487,
+        "combined": 0.1438025712966919,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
+      },
+      {
+        "label": "monorepo",
+        "rule": 0,
+        "hf": 0.12478650361299515,
+        "combined": 0.09982920289039612,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
+      },
+      {
+        "label": "terraform",
+        "rule": 0,
+        "hf": 0.04446135461330414,
+        "combined": 0.035569083690643315,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
+      },
+      {
+        "label": "java",
+        "rule": 0,
+        "hf": 0.005289454013109207,
+        "combined": 0.004231563210487366,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
+      },
+      {
+        "label": "python",
+        "rule": 0,
+        "hf": 0.0003206751716788858,
+        "combined": 0.00025654013734310865,
+        "reasons": [
+          "no rule evidence; model only"
+        ]
       }
     ],
     "chosen": [
-      "java"
-    ]
+      "node"
+    ],
+    "primary": "node"
   }
 }

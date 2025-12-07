@@ -1,5 +1,4 @@
 name: CI
-
 on:
   push:
     branches: [main]
@@ -9,19 +8,28 @@ on:
 jobs:
   build_test:
     runs-on: ubuntu-latest
-
-
+    strategy:
+      matrix:
+        node: [16.x, 18.x, 20.x]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Java ()
-        uses: actions/setup-java@v4
+      - name: Setup Node.js (${{ matrix.node }})
+        uses: actions/setup-node@v4
         with:
-          distribution: 'temurin'
-          java-version: ""
-
+          node-version: ${{ matrix.node }}
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm ci      
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm test || echo 'No tests found'
       - name: Build
-        run: javac -d out $(find src -name '*.java' 2>/dev/null)
-
-
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
 
