@@ -1,0 +1,93 @@
+{
+  "repo": "KhushiJain2004/mvn-project",
+  "metadata": {
+    "description": null,
+    "topics": [],
+    "stars": 0,
+    "forks": 0,
+    "watchers": 1,
+    "license": "None",
+    "default_branch": "main",
+    "last_commit": "2025-12-07T17:06:05Z"
+  },
+  "composition": {
+    "languages": {
+      "Java": "100.00"
+    },
+    "dominant_language": "Java",
+    "total_files": 35,
+    "file_types_count": {
+      "md": 1,
+      "xml": 2,
+      "src": 1,
+      "src/main": 1,
+      "src/main/java": 1,
+      "src/main/java/com": 1,
+      "src/main/java/com/example": 1,
+      "java": 2,
+      "src/test": 1,
+      "src/test/java": 1,
+      "src/test/java/com": 1,
+      "src/test/java/com/example": 1,
+      "target": 1,
+      "target/classes": 1,
+      "target/classes/com": 1,
+      "target/classes/com/example": 1,
+      "class": 2,
+      "target/maven-status": 1,
+      "target/maven-status/maven-compiler-plugin": 1,
+      "target/maven-status/maven-compiler-plugin/compile": 1,
+      "target/maven-status/maven-compiler-plugin/compile/default-compile": 1,
+      "lst": 4,
+      "target/maven-status/maven-compiler-plugin/testCompile": 1,
+      "target/maven-status/maven-compiler-plugin/testCompile/default-testCompile": 1,
+      "target/surefire-reports": 1,
+      "txt": 1,
+      "target/test-classes": 1,
+      "target/test-classes/com": 1,
+      "target/test-classes/com/example": 1
+    },
+    "binary_file_ratio": "0.00%",
+    "has_docs": true,
+    "has_tests": true
+  },
+  "build_and_dependency": {
+    "package_managers": [
+      "pom.xml"
+    ],
+    "package_manager_count": 1,
+    "build_systems": [],
+    "frameworks": [],
+    "runtimes": []
+  },
+  "testing_and_linting": {
+    "test_frameworks": [],
+    "lint_tools": [],
+    "coverage_tools": []
+  },
+  "containerization_and_deployment": {
+    "has_dockerfile": false,
+    "has_docker_compose": false,
+    "registry_reference": false,
+    "deployment_configs": []
+  },
+  "ci_cd": {
+    "has_workflows": false,
+    "existing_ci_tools": [],
+    "workflow_count": 0,
+    "workflow_triggers": []
+  },
+  "security": {
+    "has_env_file": false,
+    "secrets_mentions": [],
+    "vulnerability_configs": false
+  },
+  "derived": {
+    "project_type": "Java",
+    "monorepo": false,
+    "ci_required": true,
+    "recommended_templates": [
+      "add-ci-workflow"
+    ]
+  }
+}

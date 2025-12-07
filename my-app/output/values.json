@@ -1,0 +1,69 @@
+{
+  "project_type": "java",
+  "language": "java",
+  "package_manager": null,
+  "lint_command": "",
+  "test_command": "",
+  "build_command": "javac -d out $(find src -name '*.java' 2>/dev/null)",
+  "artifact_path": "",
+  "matrix": {},
+  "caching": {},
+  "secrets_required": [],
+  "deployment": {
+    "enabled": false,
+    "provider": "",
+    "config_file": "",
+    "mode": ""
+  },
+  "container": {
+    "enabled": false,
+    "image": "",
+    "registry": "",
+    "platforms": [
+      "linux/amd64"
+    ],
+    "cache": false,
+    "tags": [],
+    "provenance": false,
+    "sbom": false,
+    "sign": false
+  },
+  "triggers": {
+    "branches": [
+      "main"
+    ],
+    "push": true,
+    "pull_request": true,
+    "release_on_tag": true
+  },
+  "paths_filters": {},
+  "_classifier": {
+    "rules": [
+      {
+        "label": "java",
+        "confidence": 0.95,
+        "reason": "Java build descriptor"
+      }
+    ],
+    "hf": {
+      "model": "facebook/bart-large-mnli",
+      "labels": [],
+      "scores": [],
+      "raw": {
+        "error": "Failed to perform inference: Invalid username or password."
+      }
+    },
+    "merged": [
+      {
+        "label": "java",
+        "rule": 0.95,
+        "hf": 0,
+        "combined": 0.7124999999999999,
+        "reasons": []
+      }
+    ],
+    "chosen": [
+      "java"
+    ]
+  }
+}

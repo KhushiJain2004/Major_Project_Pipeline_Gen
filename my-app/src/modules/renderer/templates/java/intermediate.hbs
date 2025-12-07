@@ -21,11 +21,9 @@ jobs:
 
       {{> gha/setup-java this}}
 
-      {{> gha/java-install-dep this}}
+      {{> gha/step-build this}}
 
-      {{> gha/java-test this}}
-
-      {{> gha/java-build this}}
+      {{> gha/step-test this}}
 
       {{> gha/step-artifact this}}
 

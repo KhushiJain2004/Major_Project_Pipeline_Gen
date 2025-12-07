@@ -1,4 +1,4 @@
-// utils/hfclassifier.js
+// src/modules/classifier/utils/hfclassifier.js
 import { InferenceClient } from "@huggingface/inference";
 import dotenv from "dotenv";
 import fs from "fs/promises";
@@ -11,7 +11,7 @@ dotenv.config({ path: "src/modules/classifier/.env" });
 const HF_TOKEN = process.env.HF_TOKEN;
 if (!HF_TOKEN) console.warn("⚠️ HF_TOKEN missing. Hugging Face calls will be skipped.");
 
-const hf = new InferenceClient(HF_TOKEN);
+const hf = HF_TOKEN ? new InferenceClient(HF_TOKEN) : null;
 const CACHE_DIR = path.resolve(".cache");
 
 // --- cache helpers ---
@@ -38,30 +38,31 @@ export async function classifyZeroShot(summaryText, candidateLabels = [], opts =
   const model = opts.model || "facebook/bart-large-mnli";
   const multi_label = opts.multi_label ?? true;
 
-  if (!summaryText || summaryText.trim().length < 10)
+  if (!summaryText || summaryText.trim().length < 10) {
     summaryText = "Repository description for zero-shot classification.";
+  }
 
   const key = _hash({ summaryText, candidateLabels, model });
   const cached = await _readCache(key);
   if (cached) return cached;
 
-  if (!HF_TOKEN) {
+  if (!HF_TOKEN || !hf) {
     return { model, labels: [], scores: [], raw: { error: "no-token" } };
   }
 
   try {
-    // ✅ This uses the same working API as your test-hf.js
     const data = await hf.zeroShotClassification({
       model,
       inputs: summaryText,
       parameters: { candidate_labels: candidateLabels, multi_label },
-      provider: "hf-inference", // explicitly force correct provider
+      provider: "hf-inference",
     });
 
-    // Normalize both possible response formats
+    // Normalize possible formats:
     let labels = [];
     let scores = [];
-    if (Array.isArray(data) && data[0]?.label) {
+
+    if (Array.isArray(data) && data.length && data[0].label !== undefined) {
       labels = data.map((d) => d.label);
       scores = data.map((d) => d.score);
     } else if (data.labels && data.scores) {
